@@ -180,7 +180,7 @@ app.put(
 app.delete(
     '/biodata/:id',
     validateParams(idSchema),
-    async (req,res) => {
+    async (req, res) => {
         const { id } = req.params
 
         const result = await pool.query(
@@ -213,7 +213,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
     console.error(err)
 
-    if (response.headerSent) {
+    if (res.headerSent) {
         return next(err)
     }
 
