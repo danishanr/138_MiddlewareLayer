@@ -65,8 +65,8 @@ const idSchema = Joi.object({
 })
 
 function validateBody(schema) {
-        return(req, res, next) => {
-        const { error, value } = schema.validate(req.body, {
+    return(req, res, next) => {
+    const { error, value } = schema.validate(req.body, {
             abortEarly: false,
             convert: true,
             allowUnknown: false,
@@ -90,5 +90,22 @@ function validateBody(schema) {
 }
 
 function validateParams(schema){
-    
+    return (req, res, next) => {
+    const { error, value } = schema.validate(req.params)
+
+    if (error) {
+        return errorResponse(
+            res,
+            'Parameter tidak valid',
+            400, 
+            error.details.map(item => ({
+                    field: item.path.join('.'),
+                    message: item.message,
+                }))
+            )
+        }
+
+        req.params = value
+        next()
+    }
 }
